@@ -25,10 +25,18 @@ def load_llm(api_key):
 def intent_extraction(llm,intent_list,text):
     try:
         template = '''
-        I want you to take this input: {user_input} and based on the logic, I want 
-        you to extract the most appropriate intent from the provided list: {intent_list},
-        and only provide that specific text from this list.
+        You are a smart assistant, Given the user input: {user_input}, do the following steps:
+        
+        1. extract the most accurate and appropriate intent from the list:{intent_list}.
+        2. Extract the query or subject if present (e.g. song name, reminder, time, website name or etc) 
+        
+        make sure you return **strictly in this JSON format** without anything extra:
+        {{
+            "intent":"..",
+            "query":".."
+        }}
         '''
+        
         
         prompt = PromptTemplate(
             input_variables=["user_input", "intent_list"],
