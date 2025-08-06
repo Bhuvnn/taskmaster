@@ -21,7 +21,7 @@ if __name__=="__main__":
     transcribed_result=transcribe_audio(model_name,audio)
     print(transcribed_result)
     # Intent classification and extraction section
-    intent_list=["open_youtube","play_on_youtube","open_google","search_on_google","check_weather"]
+    intent_list=["open_youtube","play_on_youtube","search_on_youtube","open_google","search_on_google","check_weather"]
     model=load_llm(api_key=api_key)
     result=intent_extraction(model,str(intent_list),transcribed_result)
     def extract_json(text):
@@ -35,7 +35,7 @@ if __name__=="__main__":
     result=json.loads(result)
     print(result)
     
-    if result["intent"]=="open_youtube" or result["intent"]=="play_on_youtube":
+    if result["intent"]=="open_youtube" or result["intent"]=="play_on_youtube" or result["intent"]=="search_on_youtube":
         handle_youtube(result["intent"],result["query"])
     elif result["intent"]=="open_google" or result["intent"]=="search_on_google":
         handle_google(result["intent"],result["query"])
