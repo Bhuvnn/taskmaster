@@ -1,5 +1,6 @@
 import webbrowser
 import pyttsx3
+import time
 import os
 from langchain.prompts import PromptTemplate
 from langchain.schema import OutputParserException
@@ -40,7 +41,7 @@ def ai_answering(query):
         response = chain.invoke({"query": query})
         print(response)
         engine = pyttsx3.init()
-        engine.say("    "+response)
+        engine.say(response)
         engine.runAndWait()
 
     except ValueError as ve:
