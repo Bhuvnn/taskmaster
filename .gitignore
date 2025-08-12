@@ -1,3 +1,4 @@
 tm-env
 .env
 models
+_pycache_
