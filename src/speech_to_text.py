@@ -1,4 +1,5 @@
 import whisper
+import time
 import numpy as np
 import pyaudio
 from pyaudio import PyAudio
@@ -21,7 +22,10 @@ def record_audio(frames):
         frames_per_buffer=CHUNK
         )
 
-    print("Recording...")
+    print("Greetings! I am Taskmaster, Your personalized Voice assistant.")
+    time.sleep(0.5)
+    print("What are the instructions for me")
+
 
     for i in range(0,int(RATE/CHUNK*RECORD_SECONDS)):
         data=stream.read(CHUNK)
