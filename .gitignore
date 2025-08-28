@@ -2,3 +2,4 @@ tm-env
 .env
 models
 _pycache_
+.vscode

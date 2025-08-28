@@ -24,15 +24,16 @@ if __name__=="__main__":
     intent_list=["open_youtube","play_on_youtube","search_on_youtube","open_google","search_on_google","check_weather","ai_answering"]
     model=load_llm(api_key=api_key)
     result=intent_extraction(model,str(intent_list),transcribed_result)
-    def extract_json(text):
-        match = re.search(r'\{.*?\}', text, re.DOTALL)
-        if match:
-            return match.group(0)
-        return None
+    # def extract_json(text):
+    #     match = re.search(r'\{.*?\}', text, re.DOTALL)
+    #     if match:
+    #         return match.group(0)
+    #     return None
     
-    result=extract_json(result)
-    result=json.loads(result)
-    print(result)
+    # result=extract_json(result)
+    # result=json.loads(result)
+    print(type(result))
+    print(f"Identified Intent: {result['intent']}")
     
     if result["intent"]=="open_youtube" or result["intent"]=="play_on_youtube" or result["intent"]=="search_on_youtube":
         handle_youtube(result["intent"],result["query"])

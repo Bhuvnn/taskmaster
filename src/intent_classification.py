@@ -1,7 +1,8 @@
 from langchain_google_genai import GoogleGenerativeAI
 from google.api_core.exceptions import GoogleAPIError
+from typing import Optional
 from langchain.prompts import PromptTemplate
-
+from langchain_core.output_parsers import JsonOutputParser
 
 def load_llm(api_key):
     try:
@@ -24,33 +25,36 @@ def load_llm(api_key):
 
 def intent_extraction(llm,intent_list,text):
     try:
+        parser=JsonOutputParser(
+            schema={
+                "intent": "string",
+                "query": "string"
+            }
+        )
         template = '''
         You are a smart assistant, Given the user input: {user_input}, do the following steps:
         
         1. extract the most accurate and appropriate intent from the list:{intent_list}.
         2. Extract the query or subject if present (e.g. song name, reminder, time, website name or etc) 
         
-        make sure you return **strictly in this JSON format** without anything extra:
-        {{
-            "intent":"..",
-            "query":".."
-        }}
+        {format_instructions}
         '''
         
         
         prompt = PromptTemplate(
             input_variables=["user_input", "intent_list"],
-            template=template
+            template=template,
+            partial_variables={"format_instructions": parser.get_format_instructions()}
         )
         
-        chain = prompt | llm
+        chain = prompt | llm | parser
 
         result = chain.invoke({
             "user_input": text,
             "intent_list": intent_list
         })
         
-        return result.content if hasattr(result, "content") else result
+        return  result
     
     except KeyError as ke:
         print(f"[KeyError] Missing input variable: {ke}")
@@ -61,6 +65,8 @@ def intent_extraction(llm,intent_list,text):
     except Exception as e:
         print(f"[Error] Something went wrong during intent extraction: {e}")
         return None
+    
+    return {"intent": None, "query": None}
 
 
 
